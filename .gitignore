@@ -1,0 +1,21 @@
+# Configuraciones
+.cache/*
+.config/*
+.local/*
+.vscode/*
+.vboxclient*
+.Xauthority
+.xsession-errors
+
+# Auxiliar 2023 se añadira al final del semestre
+auxiliar_2023/*
+
+# Archivos de entrega de los alumnos
+entregas/*
+entregas_backup/*
+ayudantia/exitos/*
+ayudantia/resultados/*
+ayudantia/C1/*
+ayudantia/C2/*
+lista_curso.xls
+planilla*.xls*
