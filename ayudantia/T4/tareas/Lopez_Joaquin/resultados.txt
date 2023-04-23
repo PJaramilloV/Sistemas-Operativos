@@ -1,0 +1,309 @@
+Sistema operativo utilizado
+Linux debian11mate 5.10.0-17-amd64 #1 SMP Debian 5.10.136-1 (2022-08-13) x86_64 GNU/Linux
+==== run-san =============================
+NTHOBJ=nthread.o nutil.o ntime.o pss.o sched-fcfs.o sched-rr.o ncompartir.o sched-pri-1core.o sched-fcfs-1core.o sem.o mutex-cond.o nmsgs.o nStack-amd64.o nsystem.o
+gcc -g -c -fsanitize=address -fsanitize=undefined -DSANITIZE -Wall -Werror -pedantic -std=c18 -Wno-unused-function -Wno-unused-variable -DNTHREADS  nthread.c nutil.c ntime.c pss.c sched-fcfs.c sched-rr.c ncompartir.c sched-pri-1core.c sched-fcfs-1core.c sem.c mutex-cond.c nmsgs.c nStack-amd64.s nsystem.c
+rm -f libnth-san.a
+ar r libnth-san.a nthread.o nutil.o ntime.o pss.o sched-fcfs.o sched-rr.o ncompartir.o sched-pri-1core.o sched-fcfs-1core.o sem.o mutex-cond.o nmsgs.o nStack-amd64.o nsystem.o
+ranlib libnth-san.a
+rm nthread.o nutil.o ntime.o pss.o sched-fcfs.o sched-rr.o ncompartir.o sched-pri-1core.o sched-fcfs-1core.o sem.o mutex-cond.o nmsgs.o nStack-amd64.o nsystem.o
+gcc -g -fsanitize=address -fsanitize=undefined -DSAN -DNTHREADS -Wall -Werror -pedantic -std=c18 -InKernel test-compartir.c none.c nKernel/libnth-san.a -lm -lpthread -lrt -o test-compartir.nbin-san
+Ejecute con: test-compartir.nbin-san ... opciones ... (-h para help)
+--------------------------------------------
+./test-compartir.nbin-san
+Info: setting single-core FCFS scheduling
+Primer test: se invoca 1 nAcceder despues de nCompartir
+Primer test exitoso
+2do. test: se invoca 1 nAcceder antes que nCompartir
+2do. test exitoso
+El test del enunciado
+    0: lanzando T4
+    0: T4 solicita acceder
+ 1015: lanzando T3
+ 1016: T3 solicita acceder
+ 3016: lanzando T1
+ 3016: T1 solicita compartir p
+ 3016: T4 accede a p
+ 3016: T3 accede a p
+ 4016: lanzando T2
+ 4016: T2 solicita acceder
+ 4016: T2 accede a p
+ 5016: T4 devuelve
+ 6020: T2 devuelve
+ 7020: T3 devuelve
+ 7020: T1 termina de compartir p
+ 9026: T1 solicita compartir q
+11048: T2 solicita acceder
+11048: T2 accede a q
+12051: T2 devuelve
+12051: T1 termina de compartir q
+Test del enunciado exitoso
+
+El test de esfuerzo: se crea 1 thread que comparte 'y'.
+200 threads que acceden 30000 veces.  No debe ocurrir un deadlock.
+Tomo ~ 4 segundos en mi ryzen 5 3550H
+Test de esfuerzo exitoso en 4 segundos
+Se hicieron 30101 llamadas a nCompartir
+
+Felicitaciones: su tarea funciona correctamente
+Info: Number of cores = 1
+Info: total context changes = 60529
+Info: Implicit context changes = 0
+--------------------------------------------
+./test-compartir.nbin-san -slice 1
+Info: setting 1-core round robin scheduling
+Primer test: se invoca 1 nAcceder despues de nCompartir
+Primer test exitoso
+2do. test: se invoca 1 nAcceder antes que nCompartir
+2do. test exitoso
+El test del enunciado
+    0: lanzando T4
+    1: T4 solicita acceder
+ 1002: lanzando T3
+ 1003: T3 solicita acceder
+ 3026: lanzando T1
+ 3026: T1 solicita compartir p
+ 3026: T3 accede a p
+ 3026: T4 accede a p
+ 4028: lanzando T2
+ 4028: T2 solicita acceder
+ 4028: T2 accede a p
+ 5046: T4 devuelve
+ 6038: T2 devuelve
+ 7031: T3 devuelve
+ 7031: T1 termina de compartir p
+ 9031: T1 solicita compartir q
+11044: T2 solicita acceder
+11044: T2 accede a q
+12047: T2 devuelve
+12048: T1 termina de compartir q
+Test del enunciado exitoso
+
+El test de esfuerzo: se crea 1 thread que comparte 'y'.
+200 threads que acceden 30000 veces.  No debe ocurrir un deadlock.
+Tomo ~ 4 segundos en mi ryzen 5 3550H
+Test de esfuerzo exitoso en 4 segundos
+Se hicieron 1060 llamadas a nCompartir
+
+Felicitaciones: su tarea funciona correctamente
+Info: Number of cores = 1
+Info: total context changes = 3552
+Info: Implicit context changes = 981
+==== run-g ===============================
+NTHOBJ=nthread.o nutil.o ntime.o pss.o sched-fcfs.o sched-rr.o ncompartir.o sched-pri-1core.o sched-fcfs-1core.o sem.o mutex-cond.o nmsgs.o nStack-amd64.o nsystem.o
+gcc -g -c -Wall -Werror -pedantic -std=c18 -Wno-unused-function -Wno-unused-variable -DNTHREADS  nthread.c nutil.c ntime.c pss.c sched-fcfs.c sched-rr.c ncompartir.c sched-pri-1core.c sched-fcfs-1core.c sem.c mutex-cond.c nmsgs.c nStack-amd64.s nsystem.c
+rm -f libnth-g.a
+ar r libnth-g.a nthread.o nutil.o ntime.o pss.o sched-fcfs.o sched-rr.o ncompartir.o sched-pri-1core.o sched-fcfs-1core.o sem.o mutex-cond.o nmsgs.o nStack-amd64.o nsystem.o
+ranlib libnth-g.a
+rm nthread.o nutil.o ntime.o pss.o sched-fcfs.o sched-rr.o ncompartir.o sched-pri-1core.o sched-fcfs-1core.o sem.o mutex-cond.o nmsgs.o nStack-amd64.o nsystem.o
+gcc -g -DNTHREADS -Wall -Werror -pedantic -std=c18 -InKernel test-compartir.c none.c nKernel/libnth-g.a -lm -lpthread -lrt -o test-compartir.nbin-g
+Ejecute con: test-compartir.nbin-g ... opciones ... (-h para help)
+--------------------------------------------
+./test-compartir.nbin-g
+Info: setting single-core FCFS scheduling
+Primer test: se invoca 1 nAcceder despues de nCompartir
+Primer test exitoso
+2do. test: se invoca 1 nAcceder antes que nCompartir
+2do. test exitoso
+El test del enunciado
+    0: lanzando T4
+    0: T4 solicita acceder
+ 1001: lanzando T3
+ 1001: T3 solicita acceder
+ 3003: lanzando T1
+ 3003: T1 solicita compartir p
+ 3003: T4 accede a p
+ 3003: T3 accede a p
+ 4013: lanzando T2
+ 4013: T2 solicita acceder
+ 4013: T2 accede a p
+ 5007: T4 devuelve
+ 6018: T2 devuelve
+ 7023: T3 devuelve
+ 7023: T1 termina de compartir p
+ 9026: T1 solicita compartir q
+11035: T2 solicita acceder
+11035: T2 accede a q
+12062: T2 devuelve
+12062: T1 termina de compartir q
+Test del enunciado exitoso
+
+El test de esfuerzo: se crea 1 thread que comparte 'y'.
+200 threads que acceden 30000 veces.  No debe ocurrir un deadlock.
+Tomo ~ 4 segundos en mi ryzen 5 3550H
+Test de esfuerzo exitoso en 3 segundos
+Se hicieron 30101 llamadas a nCompartir
+
+Felicitaciones: su tarea funciona correctamente
+Info: Number of cores = 1
+Info: total context changes = 60529
+Info: Implicit context changes = 0
+--------------------------------------------
+./test-compartir.nbin-g -ncores 4
+Info: setting 4-core round robin scheduling
+Primer test: se invoca 1 nAcceder despues de nCompartir
+Primer test exitoso
+2do. test: se invoca 1 nAcceder antes que nCompartir
+2do. test exitoso
+El test del enunciado
+    0: lanzando T4
+    0: T4 solicita acceder
+ 1005: lanzando T3
+ 1005: T3 solicita acceder
+ 3025: lanzando T1
+ 3025: T1 solicita compartir p
+ 3025: T4 accede a p
+ 3025: T3 accede a p
+ 4042: lanzando T2
+ 4042: T2 solicita acceder
+ 4042: T2 accede a p
+ 5027: T4 devuelve
+ 6057: T2 devuelve
+ 7026: T3 devuelve
+ 7026: T1 termina de compartir p
+ 9027: T1 solicita compartir q
+11058: T2 solicita acceder
+11058: T2 accede a q
+12069: T2 devuelve
+12069: T1 termina de compartir q
+Test del enunciado exitoso
+
+El test de esfuerzo: se crea 1 thread que comparte 'y'.
+200 threads que acceden 30000 veces.  No debe ocurrir un deadlock.
+Tomo ~ 4 segundos en mi ryzen 5 3550H
+Test de esfuerzo exitoso en 3 segundos
+Se hicieron 8110 llamadas a nCompartir
+
+Felicitaciones: su tarea funciona correctamente
+Info: Number of cores = 4
+Info: total context changes = 12422
+Info: Implicit context changes = 0
+==== run =================================
+NTHOBJ=nthread.o nutil.o ntime.o pss.o sched-fcfs.o sched-rr.o ncompartir.o sched-pri-1core.o sched-fcfs-1core.o sem.o mutex-cond.o nmsgs.o nStack-amd64.o nsystem.o
+gcc -O -c -Wall -Werror -pedantic -std=c18 -Wno-unused-function -Wno-unused-variable -DNTHREADS  nthread.c nutil.c ntime.c pss.c sched-fcfs.c sched-rr.c ncompartir.c sched-pri-1core.c sched-fcfs-1core.c sem.c mutex-cond.c nmsgs.c nStack-amd64.s nsystem.c
+rm -f libnth.a
+ar r libnth.a nthread.o nutil.o ntime.o pss.o sched-fcfs.o sched-rr.o ncompartir.o sched-pri-1core.o sched-fcfs-1core.o sem.o mutex-cond.o nmsgs.o nStack-amd64.o nsystem.o
+ranlib libnth.a
+rm nthread.o nutil.o ntime.o pss.o sched-fcfs.o sched-rr.o ncompartir.o sched-pri-1core.o sched-fcfs-1core.o sem.o mutex-cond.o nmsgs.o nStack-amd64.o nsystem.o
+gcc -O -DNTHREADS -Wall -Werror -pedantic -std=c18 -InKernel test-compartir.c none.c nKernel/libnth.a -lm -lpthread -lrt -o test-compartir.nbin
+Ejecute con: test-compartir.nbin ... opciones ... (-h para help)
+--------------------------------------------
+./test-compartir.nbin
+Info: setting single-core FCFS scheduling
+Primer test: se invoca 1 nAcceder despues de nCompartir
+Primer test exitoso
+2do. test: se invoca 1 nAcceder antes que nCompartir
+2do. test exitoso
+El test del enunciado
+    0: lanzando T4
+    0: T4 solicita acceder
+ 1001: lanzando T3
+ 1001: T3 solicita acceder
+ 3012: lanzando T1
+ 3012: T1 solicita compartir p
+ 3012: T4 accede a p
+ 3012: T3 accede a p
+ 4019: lanzando T2
+ 4019: T2 solicita acceder
+ 4019: T2 accede a p
+ 5013: T4 devuelve
+ 6022: T2 devuelve
+ 7018: T3 devuelve
+ 7018: T1 termina de compartir p
+ 9024: T1 solicita compartir q
+11030: T2 solicita acceder
+11030: T2 accede a q
+12044: T2 devuelve
+12044: T1 termina de compartir q
+Test del enunciado exitoso
+
+El test de esfuerzo: se crea 1 thread que comparte 'y'.
+200 threads que acceden 30000 veces.  No debe ocurrir un deadlock.
+Tomo ~ 4 segundos en mi ryzen 5 3550H
+Test de esfuerzo exitoso en 3 segundos
+Se hicieron 30101 llamadas a nCompartir
+
+Felicitaciones: su tarea funciona correctamente
+Info: Number of cores = 1
+Info: total context changes = 60529
+Info: Implicit context changes = 0
+--------------------------------------------
+./test-compartir.nbin -ncores 4
+Info: setting 4-core round robin scheduling
+Primer test: se invoca 1 nAcceder despues de nCompartir
+Primer test exitoso
+2do. test: se invoca 1 nAcceder antes que nCompartir
+2do. test exitoso
+El test del enunciado
+    0: lanzando T4
+    0: T4 solicita acceder
+ 1014: lanzando T3
+ 1014: T3 solicita acceder
+ 3016: lanzando T1
+ 3016: T1 solicita compartir p
+ 3016: T4 accede a p
+ 3016: T3 accede a p
+ 4073: lanzando T2
+ 4073: T2 solicita acceder
+ 4073: T2 accede a p
+ 5045: T4 devuelve
+ 6096: T2 devuelve
+ 7027: T3 devuelve
+ 7028: T1 termina de compartir p
+ 9065: T1 solicita compartir q
+11097: T2 solicita acceder
+11097: T2 accede a q
+12098: T2 devuelve
+12098: T1 termina de compartir q
+Test del enunciado exitoso
+
+El test de esfuerzo: se crea 1 thread que comparte 'y'.
+200 threads que acceden 30000 veces.  No debe ocurrir un deadlock.
+Tomo ~ 4 segundos en mi ryzen 5 3550H
+Test de esfuerzo exitoso en 3 segundos
+Se hicieron 5337 llamadas a nCompartir
+
+Felicitaciones: su tarea funciona correctamente
+Info: Number of cores = 4
+Info: total context changes = 623
+Info: Implicit context changes = 0
+--------------------------------------------
+./test-compartir.nbin -slice 1
+Info: setting 1-core round robin scheduling
+Primer test: se invoca 1 nAcceder despues de nCompartir
+Primer test exitoso
+2do. test: se invoca 1 nAcceder antes que nCompartir
+2do. test exitoso
+El test del enunciado
+    0: lanzando T4
+    0: T4 solicita acceder
+ 1207: lanzando T3
+ 1207: T3 solicita acceder
+ 3262: lanzando T1
+ 3262: T1 solicita compartir p
+ 3262: T3 accede a p
+ 3262: T4 accede a p
+ 4279: lanzando T2
+ 4279: T2 solicita acceder
+ 4279: T2 accede a p
+ 5407: T4 devuelve
+ 6293: T2 devuelve
+ 7263: T3 devuelve
+ 7263: T1 termina de compartir p
+ 9271: T1 solicita compartir q
+11304: T2 solicita acceder
+11304: T2 accede a q
+12307: T2 devuelve
+12307: T1 termina de compartir q
+Test del enunciado exitoso
+
+El test de esfuerzo: se crea 1 thread que comparte 'y'.
+200 threads que acceden 30000 veces.  No debe ocurrir un deadlock.
+Tomo ~ 4 segundos en mi ryzen 5 3550H
+Test de esfuerzo exitoso en 3 segundos
+Se hicieron 2509 llamadas a nCompartir
+
+Felicitaciones: su tarea funciona correctamente
+Info: Number of cores = 1
+Info: total context changes = 6337
+Info: Implicit context changes = 688

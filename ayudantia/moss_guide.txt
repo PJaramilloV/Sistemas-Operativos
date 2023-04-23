@@ -1,0 +1,9 @@
+http://moss.stanford.edu/results/4/6550814237884
+http://moss.stanford.edu/results/3/8223556688321
+http://moss.stanford.edu/results/7/7382711815621
+
+
+FILE = prod.c
+
+perl moss -l c -b T1/FILE T1/tareas/*/FILE
+
